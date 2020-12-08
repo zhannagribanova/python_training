@@ -12,16 +12,21 @@ class TestAddAddressBookEntry(unittest.TestCase):
     
     def test_add_address_book_entry(self):
         wd = self.wd
-        wd.get("http://localhost/addressbook")
+        self.open_home_page(wd)
+        self.login(wd)
+        self.open_add_new_page(wd)
+        self.create_contact(wd)
+        self.return_to_home_page(wd)
+        self.logout(wd)
 
-        wd.find_element_by_name("user").click()
-        wd.find_element_by_name("user").clear()
-        wd.find_element_by_name("user").send_keys("admin")
-        wd.find_element_by_name("pass").clear()
-        wd.find_element_by_name("pass").send_keys("secret")
-        wd.find_element_by_xpath("//input[@value='Login']").click()
+    def logout(self, wd):
+        wd.find_element_by_link_text("Logout").click()
 
-        wd.find_element_by_link_text("add new").click()
+    def return_to_home_page(self, wd):
+        wd.find_element_by_link_text("home page").click()
+
+    def create_contact(self, wd):
+        # fill contact form, name input
         wd.find_element_by_name("firstname").click()
         wd.find_element_by_name("firstname").clear()
         wd.find_element_by_name("firstname").send_keys("Oleg")
@@ -31,8 +36,10 @@ class TestAddAddressBookEntry(unittest.TestCase):
         wd.find_element_by_name("lastname").send_keys("Kolesnikov")
         wd.find_element_by_name("nickname").clear()
         wd.find_element_by_name("nickname").send_keys("olegkolesnikov")
+        # photo upload
         wd.find_element_by_name("photo").clear()
         wd.find_element_by_name("photo").send_keys("C:\\Users\\j.gribanova\\Pictures\\photo_2019-01-28_23-36-11.jpg")
+        # information about work
         wd.find_element_by_name("title").click()
         wd.find_element_by_name("title").clear()
         wd.find_element_by_name("title").send_keys("Title")
@@ -40,6 +47,7 @@ class TestAddAddressBookEntry(unittest.TestCase):
         wd.find_element_by_name("company").send_keys("Apple")
         wd.find_element_by_name("address").clear()
         wd.find_element_by_name("address").send_keys("USA California")
+        # telephones
         wd.find_element_by_name("home").clear()
         wd.find_element_by_name("home").send_keys("13-13-13")
         wd.find_element_by_name("mobile").clear()
@@ -48,6 +56,7 @@ class TestAddAddressBookEntry(unittest.TestCase):
         wd.find_element_by_name("work").send_keys("2-12-12")
         wd.find_element_by_name("fax").clear()
         wd.find_element_by_name("fax").send_keys("123-123-123-123")
+        # e-mails and homepage
         wd.find_element_by_name("email").clear()
         wd.find_element_by_name("email").send_keys("test1@test.ru")
         wd.find_element_by_name("email2").clear()
@@ -56,6 +65,7 @@ class TestAddAddressBookEntry(unittest.TestCase):
         wd.find_element_by_name("email3").send_keys("test3@test.ru")
         wd.find_element_by_name("homepage").clear()
         wd.find_element_by_name("homepage").send_keys("https://test.ru")
+        # birthday
         wd.find_element_by_name("bday").click()
         Select(wd.find_element_by_name("bday")).select_by_visible_text("1")
         wd.find_element_by_name("bday").click()
@@ -65,6 +75,7 @@ class TestAddAddressBookEntry(unittest.TestCase):
         wd.find_element_by_name("byear").click()
         wd.find_element_by_name("byear").clear()
         wd.find_element_by_name("byear").send_keys("1990")
+        # anniversary
         wd.find_element_by_name("aday").click()
         Select(wd.find_element_by_name("aday")).select_by_visible_text("1")
         wd.find_element_by_name("aday").click()
@@ -74,17 +85,32 @@ class TestAddAddressBookEntry(unittest.TestCase):
         wd.find_element_by_name("ayear").click()
         wd.find_element_by_name("ayear").clear()
         wd.find_element_by_name("ayear").send_keys("2030")
+        # address
         wd.find_element_by_name("address2").click()
         wd.find_element_by_name("address2").clear()
         wd.find_element_by_name("address2").send_keys("Russia, Saint-Petersburg")
         wd.find_element_by_name("phone2").clear()
         wd.find_element_by_name("phone2").send_keys("13")
+        # notes
         wd.find_element_by_name("notes").clear()
         wd.find_element_by_name("notes").send_keys("Oleg is a good man")
+        # submit contact creation
         wd.find_element_by_xpath("(//input[@name='submit'])[2]").click()
-        wd.find_element_by_link_text("home page").click()
-        wd.find_element_by_link_text("Logout").click()
-    
+
+    def open_add_new_page(self, wd):
+        wd.find_element_by_link_text("add new").click()
+
+    def login(self, wd):
+        wd.find_element_by_name("user").click()
+        wd.find_element_by_name("user").clear()
+        wd.find_element_by_name("user").send_keys("admin")
+        wd.find_element_by_name("pass").clear()
+        wd.find_element_by_name("pass").send_keys("secret")
+        wd.find_element_by_xpath("//input[@value='Login']").click()
+
+    def open_home_page(self, wd):
+        wd.get("http://localhost/addressbook")
+
     def is_element_present(self, how, what):
         try: self.wd.find_element(by=how, value=what)
         except NoSuchElementException as e: return False
