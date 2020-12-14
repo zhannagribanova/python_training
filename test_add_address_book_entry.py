@@ -10,9 +10,8 @@ class TestAddAddressBookEntry(unittest.TestCase):
         self.wd.implicitly_wait(30)
     
     def test_add_address_book_entry(self):
-        wd = self.wd
-        self.login(wd, username="admin", password="secret")
-        self.create_contact(wd, Contact(firstname="Oleg", middlename="Ivan", lastname="Kolesnikov", nickname="olegkolesnikov",
+        self.login(username="admin", password="secret")
+        self.create_contact(Contact(firstname="Oleg", middlename="Ivan", lastname="Kolesnikov", nickname="olegkolesnikov",
                             photo="C:\\Users\\j.gribanova\\Pictures\\photo_2019-01-28_23-36-11.jpg", title="Title",
                             company="Apple", address_company="USA California", telephone_home="13-13-13",
                             telephone_mobile="89111111111", telephone_work="2-12-12", fax="123-123-123-123",
@@ -20,16 +19,19 @@ class TestAddAddressBookEntry(unittest.TestCase):
                             homepage="https://test.ru", bday="1", bmonth="January", byear="1990", aday="1",
                             amonth="January", ayear="2030", home_address="Russia, Saint-Petersburg", home="13",
                             notes="Oleg is a good man"))
-        self.logout(wd)
+        self.logout()
 
-    def logout(self, wd):
+    def logout(self):
+        wd = self.wd
         wd.find_element_by_link_text("Logout").click()
 
-    def return_to_home_page(self, wd):
+    def return_to_home_page(self):
+        wd = self.wd
         wd.find_element_by_link_text("home page").click()
 
-    def create_contact(self, wd, contact):
-        self.open_add_new_page(wd)
+    def create_contact(self, contact):
+        wd = self.wd
+        self.open_add_new_page()
         # fill contact form, name input
         wd.find_element_by_name("firstname").click()
         wd.find_element_by_name("firstname").clear()
@@ -100,13 +102,15 @@ class TestAddAddressBookEntry(unittest.TestCase):
         wd.find_element_by_name("notes").send_keys(contact.notes)
         # submit contact creation
         wd.find_element_by_xpath("(//input[@name='submit'])[2]").click()
-        self.return_to_home_page(wd)
+        self.return_to_home_page()
 
-    def open_add_new_page(self, wd):
+    def open_add_new_page(self):
+        wd = self.wd
         wd.find_element_by_link_text("add new").click()
 
-    def login(self, wd, username, password):
-        self.open_home_page(wd)
+    def login(self, username, password):
+        wd = self.wd
+        self.open_home_page()
         wd.find_element_by_name("user").click()
         wd.find_element_by_name("user").clear()
         wd.find_element_by_name("user").send_keys(username)
@@ -114,7 +118,8 @@ class TestAddAddressBookEntry(unittest.TestCase):
         wd.find_element_by_name("pass").send_keys(password)
         wd.find_element_by_xpath("//input[@value='Login']").click()
 
-    def open_home_page(self, wd):
+    def open_home_page(self):
+        wd = self.wd
         wd.get("http://localhost/addressbook")
     
     def tearDown(self):
