@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
-from selenium.common.exceptions import NoSuchElementException
-from selenium.common.exceptions import NoAlertPresentException
 import unittest
 from contact import Contact
 
@@ -13,9 +11,7 @@ class TestAddAddressBookEntry(unittest.TestCase):
     
     def test_add_address_book_entry(self):
         wd = self.wd
-        self.open_home_page(wd)
         self.login(wd, username="admin", password="secret")
-        self.open_add_new_page(wd)
         self.create_contact(wd, Contact(firstname="Oleg", middlename="Ivan", lastname="Kolesnikov", nickname="olegkolesnikov",
                             photo="C:\\Users\\j.gribanova\\Pictures\\photo_2019-01-28_23-36-11.jpg", title="Title",
                             company="Apple", address_company="USA California", telephone_home="13-13-13",
@@ -24,7 +20,6 @@ class TestAddAddressBookEntry(unittest.TestCase):
                             homepage="https://test.ru", bday="1", bmonth="January", byear="1990", aday="1",
                             amonth="January", ayear="2030", home_address="Russia, Saint-Petersburg", home="13",
                             notes="Oleg is a good man"))
-        self.return_to_home_page(wd)
         self.logout(wd)
 
     def logout(self, wd):
@@ -34,6 +29,7 @@ class TestAddAddressBookEntry(unittest.TestCase):
         wd.find_element_by_link_text("home page").click()
 
     def create_contact(self, wd, contact):
+        self.open_add_new_page(wd)
         # fill contact form, name input
         wd.find_element_by_name("firstname").click()
         wd.find_element_by_name("firstname").clear()
@@ -104,11 +100,13 @@ class TestAddAddressBookEntry(unittest.TestCase):
         wd.find_element_by_name("notes").send_keys(contact.notes)
         # submit contact creation
         wd.find_element_by_xpath("(//input[@name='submit'])[2]").click()
+        self.return_to_home_page(wd)
 
     def open_add_new_page(self, wd):
         wd.find_element_by_link_text("add new").click()
 
     def login(self, wd, username, password):
+        self.open_home_page(wd)
         wd.find_element_by_name("user").click()
         wd.find_element_by_name("user").clear()
         wd.find_element_by_name("user").send_keys(username)
@@ -118,16 +116,6 @@ class TestAddAddressBookEntry(unittest.TestCase):
 
     def open_home_page(self, wd):
         wd.get("http://localhost/addressbook")
-
-    def is_element_present(self, how, what):
-        try: self.wd.find_element(by=how, value=what)
-        except NoSuchElementException as e: return False
-        return True
-    
-    def is_alert_present(self):
-        try: self.wd.switch_to_alert()
-        except NoAlertPresentException as e: return False
-        return True
     
     def tearDown(self):
         self.wd.quit()
