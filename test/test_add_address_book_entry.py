@@ -12,7 +12,7 @@ def app(request):
 
     
 def test_add_address_book_entry(app):
-    app.login(username="admin", password="secret")
+    app.session.login(username="admin", password="secret")
     app.create_contact(Contact(firstname="Oleg", middlename="Ivan", lastname="Kolesnikov", nickname="olegkolesnikov",
                             photo="C:\\Users\\j.gribanova\\Pictures\\photo_2019-01-28_23-36-11.jpg", title="Title",
                             company="Apple", address_company="USA California", telephone_home="13-13-13",
@@ -21,4 +21,4 @@ def test_add_address_book_entry(app):
                             homepage="https://test.ru", bday="1", bmonth="January", byear="1990", aday="1",
                             amonth="January", ayear="2030", home_address="Russia, Saint-Petersburg", home="13",
                             notes="Oleg is a good man"))
-    app.logout()
+    app.session.logout()
