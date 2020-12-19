@@ -14,14 +14,7 @@ class GroupHelper:
         wd.find_element_by_name("new").click()
         # fill group form
         wd.find_element_by_name("group_name").click()
-        wd.find_element_by_name("group_name").clear()
-        wd.find_element_by_name("group_name").send_keys(group.name)
-        wd.find_element_by_name("group_header").click()
-        wd.find_element_by_name("group_header").clear()
-        wd.find_element_by_name("group_header").send_keys(group.header)
-        wd.find_element_by_name("group_footer").click()
-        wd.find_element_by_name("group_footer").clear()
-        wd.find_element_by_name("group_footer").send_keys(group.footer)
+        self.group_data(wd, group)
         wd.find_element_by_xpath("//form[@action='/addressbook/group.php']").click()
         # submit group creation
         wd.find_element_by_name("submit").click()
@@ -35,6 +28,27 @@ class GroupHelper:
         # submit deletion
         wd.find_element_by_name("delete").click()
         self.return_to_groups_page()
+
+    def edit_first_group(self, group):
+        wd = self.app.wd
+        self.open_groups_page()
+        # select first group
+        wd.find_element_by_name("selected[]").click()
+        # edit group
+        wd.find_element_by_name("edit").click()
+        self.group_data(wd, group)
+        wd.find_element_by_name("update").click()
+
+    @staticmethod
+    def group_data(wd, group):
+        wd.find_element_by_name("group_name").clear()
+        wd.find_element_by_name("group_name").send_keys(group.name)
+        wd.find_element_by_name("group_header").click()
+        wd.find_element_by_name("group_header").clear()
+        wd.find_element_by_name("group_header").send_keys(group.header)
+        wd.find_element_by_name("group_footer").click()
+        wd.find_element_by_name("group_footer").clear()
+        wd.find_element_by_name("group_footer").send_keys(group.footer)
 
     def return_to_groups_page(self):
         wd = self.app.wd
