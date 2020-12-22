@@ -3,7 +3,6 @@ from model.contact import Contact
 
     
 def test_add_address_book_entry(app):
-    app.session.login(username="admin", password="secret")
     app.contact.create(Contact(firstname="Oleg",
                                middlename="Ivan",
                                lastname="Kolesnikov",
@@ -27,4 +26,4 @@ def test_add_address_book_entry(app):
                                home_address="Russia, Saint-Petersburg",
                                home="13",
                                notes="Oleg is a good man"))
-    app.session.logout()
+
