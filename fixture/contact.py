@@ -126,10 +126,10 @@ class ContactHelper:
     def get_contact_list(self):
         wd = self.app.wd
         self.open_home_page()
-        contact = []
+        contacts = []
         for element in wd.find_elements_by_css_selector("tr[name=\"entry\"]"):
-            firstname_text = element.find_element_by_css_selector("td:nth-child(2)").text
-            middlename_text = element.find_element_by_css_selector("td:nth-child(3)").text
+            firstname_text = element.find_element_by_css_selector("td:nth-child(3)").text
+            lastname_text = element.find_element_by_css_selector("td:nth-child(2)").text
             identifier = element.find_element_by_name("selected[]").get_attribute("value")
-            contact.append(Contact(firstname=firstname_text, middlename=middlename_text, identifier=identifier))
-        return contact
+            contacts.append(Contact(firstname=firstname_text, lastname=lastname_text, identifier=identifier))
+        return contacts

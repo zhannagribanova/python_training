@@ -26,7 +26,8 @@ def test_edit_first_contact(app):
                                home_address="Russia, Saint-Petersburg",
                                home="13",
                                notes="Oleg is a good man"))
-    app.contact.edit_first_contact(Contact(firstname="Oleg",
+    old_contacts = app.contact.get_contact_list()
+    contact = Contact(firstname="Oleg",
                                middlename="Maksim",
                                lastname="Olesnikov",
                                nickname="maksimolesnikov",
@@ -48,4 +49,11 @@ def test_edit_first_contact(app):
                                ayear="2031",
                                home_address="Russia, Moscow",
                                home="133",
-                               notes="Maksim is a good man"))
+                               notes="Maksim is a good man")
+    contact.identifier = old_contacts[0].identifier
+    app.contact.edit_first_contact(contact)
+    new_contacts = app.contact.get_contact_list()
+    assert len(old_contacts) == len(new_contacts)
+    # replace
+    old_contacts[0] = Contact(firstname=contact.firstname, lastname=contact.lastname, identifier=contact.identifier)
+    assert sorted(old_contacts, key=Contact.id_or_max) == sorted(new_contacts, key=Contact.id_or_max)
