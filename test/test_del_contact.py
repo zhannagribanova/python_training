@@ -26,4 +26,10 @@ def test_delete_first_contact(app):
                                home_address="Russia, Saint-Petersburg",
                                home="13",
                                notes="Oleg is a good man"))
+    old_contacts = app.contact.get_contact_list()
     app.contact.delete_first_contact()
+    new_contacts = app.contact.get_contact_list()
+    assert len(old_contacts) - 1 == len(new_contacts)
+    # delete first element in the list
+    old_contacts[0:1] = []
+    assert old_contacts == new_contacts
