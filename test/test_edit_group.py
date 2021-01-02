@@ -1,3 +1,4 @@
+from random import randint
 from model.group import Group
 
 
@@ -5,7 +6,7 @@ def test_edit_first_group_name(app):
     if app.group.count() == 0:
         app.group.create(Group(name='Test'))
     old_groups = app.group.get_group_list()
-    group = Group(name="New group")
+    group = Group(name="New group "+str(randint(1, 1000)))
     # remember the identifier
     group.identifier = old_groups[0].identifier
     app.group.edit_first_group(group)
