@@ -3,7 +3,8 @@ from model.contact import Contact
 
     
 def test_add_address_book_entry(app):
-    app.contact.create(Contact(firstname="Oleg",
+    old_contacts = app.contact.get_contact_list()
+    contact = Contact(firstname="Oleg",
                                middlename="Ivan",
                                lastname="Kolesnikov",
                                nickname="olegkolesnikov",
@@ -25,5 +26,11 @@ def test_add_address_book_entry(app):
                                ayear="2030",
                                home_address="Russia, Saint-Petersburg",
                                home="13",
-                               notes="Oleg is a good man"))
+                               notes="Oleg is a good man")
+    app.contact.create(contact)
+    new_contacts = app.contact.get_contact_list()
+    assert len(old_contacts) + 1 == len(new_contacts)
+    old_contacts.append(Contact(firstname=contact.firstname, lastname=contact.lastname, identifier=contact.identifier))
+    assert sorted(old_contacts, key=Contact.id_or_max) == sorted(new_contacts, key=Contact.id_or_max)
+
 
