@@ -23,6 +23,7 @@ class ContactHelper:
         # submit contact creation
         wd.find_element_by_xpath("(//input[@name='submit'])[2]").click()
         self.return_to_home_page()
+        self.contact_cache = None
 
     def delete_first_contact(self):
         wd = self.app.wd
@@ -32,6 +33,7 @@ class ContactHelper:
         # submit deletion
         wd.find_element_by_xpath("//input[@value='Delete']").click()
         wd.switch_to_alert().accept()
+        self.contact_cache = None
 
     def edit_first_contact(self, contact):
         wd = self.app.wd
@@ -41,6 +43,7 @@ class ContactHelper:
         self.contact_data(wd, contact)
         # submit edit contact
         wd.find_element_by_name("update").click()
+        self.contact_cache = None
 
     @staticmethod
     def contact_data(wd, contact):
@@ -123,13 +126,16 @@ class ContactHelper:
         self.open_home_page()
         return len(wd.find_elements_by_name("selected[]"))
 
+    contact_cache = None
+
     def get_contact_list(self):
-        wd = self.app.wd
-        self.open_home_page()
-        contacts = []
-        for element in wd.find_elements_by_css_selector("tr[name=\"entry\"]"):
-            firstname_text = element.find_element_by_css_selector("td:nth-child(3)").text
-            lastname_text = element.find_element_by_css_selector("td:nth-child(2)").text
-            identifier = element.find_element_by_name("selected[]").get_attribute("value")
-            contacts.append(Contact(firstname=firstname_text, lastname=lastname_text, identifier=identifier))
-        return contacts
+        if self.contact_cache is None:
+            wd = self.app.wd
+            self.open_home_page()
+            self.contact_cache = []
+            for element in wd.find_elements_by_css_selector("tr[name=\"entry\"]"):
+                firstname_text = element.find_element_by_css_selector("td:nth-child(3)").text
+                lastname_text = element.find_element_by_css_selector("td:nth-child(2)").text
+                identifier = element.find_element_by_name("selected[]").get_attribute("value")
+                self.contact_cache.append(Contact(firstname=firstname_text, lastname=lastname_text, identifier=identifier))
+        return self.contact_cache
