@@ -3,7 +3,7 @@ from model.group import Group
 from random import randrange
 
 
-def test_edit_first_group_name(app):
+def test_edit_some_group_name(app):
     if app.group.count() == 0:
         app.group.create(Group(name='Test'))
     old_groups = app.group.get_group_list()
