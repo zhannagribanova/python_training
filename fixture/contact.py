@@ -1,6 +1,7 @@
 from selenium.webdriver.support.ui import Select
 from model.contact import Contact
 
+
 class ContactHelper:
 
     def __init__(self, app):
@@ -143,7 +144,7 @@ class ContactHelper:
             wd = self.app.wd
             self.open_home_page()
             self.contact_cache = []
-            for element in wd.find_elements_by_css_selector("tr[name=\"entry\"]"):
+            for element in wd.find_elements_by_css_selector('tr[name="entry"]'):
                 firstname_text = element.find_element_by_css_selector("td:nth-child(3)").text
                 lastname_text = element.find_element_by_css_selector("td:nth-child(2)").text
                 identifier = element.find_element_by_name("selected[]").get_attribute("value")
