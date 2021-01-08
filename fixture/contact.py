@@ -49,8 +49,7 @@ class ContactHelper:
 
     def edit_contact_by_index(self, index, new_contact_data):
         wd = self.app.wd
-        self.open_home_page()
-        wd.find_element_by_xpath("(// img[@ alt='Edit'])["+str(index+1)+"]").click()
+        self.open_contact_to_edit_by_index(index)
         self.contact_data(wd, new_contact_data)
         # submit edit contact
         wd.find_element_by_name("update").click()
@@ -150,3 +149,13 @@ class ContactHelper:
                 identifier = element.find_element_by_name("selected[]").get_attribute("value")
                 self.contact_cache.append(Contact(firstname=firstname_text, lastname=lastname_text, identifier=identifier))
         return self.contact_cache
+
+    def open_contact_to_edit_by_index(self, index):
+        wd = self.app.wd
+        self.open_home_page()
+        wd.find_element_by_xpath("(// img[@ alt='Edit'])["+str(index+1)+"]").click()
+
+    def open_contact_view_by_index(self, index):
+        wd = self.app.wd
+        self.open_home_page()
+        wd.find_element_by_xpath("(// img[@ alt='Details'])["+str(index+1)+"]").click()
