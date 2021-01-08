@@ -121,7 +121,7 @@ class ContactHelper:
         wd.find_element_by_name("address2").clear()
         wd.find_element_by_name("address2").send_keys(contact.home_address)
         wd.find_element_by_name("phone2").clear()
-        wd.find_element_by_name("phone2").send_keys(contact.home)
+        wd.find_element_by_name("phone2").send_keys(contact.telephone_secondary)
         # notes
         wd.find_element_by_name("notes").clear()
         wd.find_element_by_name("notes").send_keys(contact.notes)
