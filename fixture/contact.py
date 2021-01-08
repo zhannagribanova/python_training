@@ -1,5 +1,6 @@
 from selenium.webdriver.support.ui import Select
 from model.contact import Contact
+import re
 
 
 class ContactHelper:
@@ -147,8 +148,25 @@ class ContactHelper:
                 firstname_text = element.find_element_by_css_selector("td:nth-child(3)").text
                 lastname_text = element.find_element_by_css_selector("td:nth-child(2)").text
                 identifier = element.find_element_by_name("selected[]").get_attribute("value")
-                self.contact_cache.append(Contact(firstname=firstname_text, lastname=lastname_text, identifier=identifier))
+                all_phones = element.find_element_by_css_selector("td:nth-child(6)").text.splitlines()
+                self.contact_cache.append(Contact(firstname=firstname_text, lastname=lastname_text,
+                                                  identifier=identifier, telephone_home=all_phones[0],
+                                                  telephone_mobile=all_phones[1], telephone_work=all_phones[2],
+                                                  telephone_secondary=all_phones[3]))
         return self.contact_cache
+
+    def get_contact_info_from_edit_page(self, index):
+        wd = self.app.wd
+        self.open_contact_to_edit_by_index(index)
+        firstname = wd.find_element_by_name("firstname").get_attribute("value")
+        lastname = wd.find_element_by_name("lastname").get_attribute("value")
+        id = wd.find_element_by_name("id").get_attribute("value")
+        homephone = wd.find_element_by_name("home").get_attribute("value")
+        workphone = wd.find_element_by_name("work").get_attribute("value")
+        mobilephone = wd.find_element_by_name("mobile").get_attribute("value")
+        secondaryphone = wd.find_element_by_name("phone2").get_attribute("value")
+        return Contact(firstname=firstname, lastname=lastname, identifier=id, telephone_home=homephone,
+                       telephone_work=workphone, telephone_mobile=mobilephone, telephone_secondary=secondaryphone)
 
     def open_contact_to_edit_by_index(self, index):
         wd = self.app.wd
@@ -159,3 +177,14 @@ class ContactHelper:
         wd = self.app.wd
         self.open_home_page()
         wd.find_element_by_xpath("(// img[@ alt='Details'])["+str(index+1)+"]").click()
+
+    def get_contact_from_view_page(self, index):
+        wd = self.app.wd
+        self.open_contact_view_by_index(index)
+        text = wd.find_element_by_id("content").text
+        homephone = re.search("H: (.*)", text).group(1)
+        workphone = re.search("W: (.*)", text).group(1)
+        mobilephone = re.search("M: (.*)", text).group(1)
+        secondaryphone = re.search("P: (.*)", text).group(1)
+        return Contact(telephone_home=homephone, telephone_work=workphone, telephone_mobile=mobilephone,
+                       telephone_secondary=secondaryphone)
