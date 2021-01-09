@@ -149,8 +149,11 @@ class ContactHelper:
                 lastname_text = element.find_element_by_css_selector("td:nth-child(2)").text
                 identifier = element.find_element_by_name("selected[]").get_attribute("value")
                 all_phones = element.find_element_by_css_selector("td:nth-child(6)").text
+                all_email = element.find_element_by_css_selector("td:nth-child(5)").text
+                address = element.find_element_by_css_selector("td:nth-child(4)").text
                 self.contact_cache.append(Contact(firstname=firstname_text, lastname=lastname_text,
-                                                  identifier=identifier, all_phones_from_home_page=all_phones))
+                                                  identifier=identifier, all_phones_from_home_page=all_phones,
+                                                  all_email_from_home_page=all_email, address_company=address))
         return self.contact_cache
 
     def get_contact_info_from_edit_page(self, index):
@@ -163,8 +166,13 @@ class ContactHelper:
         workphone = wd.find_element_by_name("work").get_attribute("value")
         mobilephone = wd.find_element_by_name("mobile").get_attribute("value")
         secondaryphone = wd.find_element_by_name("phone2").get_attribute("value")
+        email1 = wd.find_element_by_name("email").get_attribute("value")
+        email2 = wd.find_element_by_name("email2").get_attribute("value")
+        email3 = wd.find_element_by_name("email3").get_attribute("value")
+        address = wd.find_element_by_name("address").text
         return Contact(firstname=firstname, lastname=lastname, identifier=id, telephone_home=homephone,
-                       telephone_work=workphone, telephone_mobile=mobilephone, telephone_secondary=secondaryphone)
+                       telephone_work=workphone, telephone_mobile=mobilephone, telephone_secondary=secondaryphone,
+                       email1=email1, email2=email2, email3=email3, address_company=address)
 
     def open_contact_to_edit_by_index(self, index):
         wd = self.app.wd
