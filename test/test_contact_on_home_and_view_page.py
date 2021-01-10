@@ -1,10 +1,15 @@
 import re
 
 
-def test_phones_on_home_page(app):
+def test_contact_on_home_page(app):
     contact_from_home_page = app.contact.get_contact_list()[0]
     contact_from_edit_page = app.contact.get_contact_info_from_edit_page(0)
     assert contact_from_home_page.all_phones_from_home_page == merge_phones_like_on_home_page(contact_from_edit_page)
+    assert contact_from_home_page.all_email_from_home_page == merge_emails_like_on_home_and_edit_page(contact_from_edit_page)
+    assert contact_from_home_page.address_company == contact_from_edit_page.address_company
+    assert contact_from_home_page.firstname == contact_from_edit_page.firstname
+    assert contact_from_home_page.lastname == contact_from_edit_page.lastname
+    assert contact_from_home_page.identifier == contact_from_edit_page.identifier
 
 
 def test_phones_on_contact_view_page(app):
@@ -26,3 +31,8 @@ def merge_phones_like_on_home_page(contact):
                                 filter(lambda x: x is not None,
                                        [contact.telephone_home, contact.telephone_mobile, contact.telephone_work,
                                         contact.telephone_secondary]))))
+
+
+def merge_emails_like_on_home_and_edit_page(contact):
+    return "\n".join(filter(lambda x: x != "" and x is not None, [contact.email1, contact.email2, contact.email3]))
+
