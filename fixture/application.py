@@ -6,7 +6,7 @@ from fixture.contact import ContactHelper
 
 class Application:
 
-    def __init__(self, browser, base_URL):
+    def __init__(self, browser, base_URL, password):
         if browser == "firefox":
             self.wd = webdriver.Firefox()
         elif browser == "chrome":
@@ -20,6 +20,7 @@ class Application:
         self.group = GroupHelper(self)
         self.contact = ContactHelper(self)
         self.base_URL = base_URL
+        self.password = password
 
     def is_valid(self):
         try:
