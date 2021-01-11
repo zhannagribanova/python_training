@@ -51,7 +51,7 @@ class ContactHelper:
     def edit_contact_by_index(self, index, new_contact_data):
         wd = self.app.wd
         self.open_contact_to_edit_by_index(index)
-        self.contact_data(wd, new_contact_data)
+        self.contact_data(new_contact_data)
         # submit edit contact
         wd.find_element_by_name("update").click()
         self.contact_cache = None
