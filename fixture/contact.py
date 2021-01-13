@@ -162,13 +162,22 @@ class ContactHelper:
         self.open_home_page()
         wd.find_element_by_xpath("(// img[@ alt='Details'])["+str(index+1)+"]").click()
 
+    @staticmethod
+    def search_in_text(search_text, text):
+        search_result = re.search(search_text, text)
+        if search_result is not None:
+            return search_result.group(1)
+        else:
+            return ''
+
     def get_contact_from_view_page(self, index):
         wd = self.app.wd
         self.open_contact_view_by_index(index)
         text = wd.find_element_by_id("content").text
-        homephone = re.search("H: (.*)", text).group(1)
-        workphone = re.search("W: (.*)", text).group(1)
-        mobilephone = re.search("M: (.*)", text).group(1)
-        secondaryphone = re.search("P: (.*)", text).group(1)
+        homephone = self.search_in_text("H: (.*)", text)
+        workphone = self.search_in_text("W: (.*)", text)
+        mobilephone = self.search_in_text("M: (.*)", text)
+        secondaryphone = self.search_in_text("P: (.*)", text)
         return Contact(telephone_home=homephone, telephone_work=workphone, telephone_mobile=mobilephone,
                        telephone_secondary=secondaryphone)
+
