@@ -42,7 +42,7 @@ class Contact:
 
     def __eq__(self, other):
         return (self.identifier is None or other.identifier is None or self.identifier == other.identifier) \
-               and self.firstname == other.firstname and self.middlename == other.middlename
+               and self.firstname == other.firstname and self.lastname == other.lastname
 
     def id_or_max(self):
         if self.identifier:
