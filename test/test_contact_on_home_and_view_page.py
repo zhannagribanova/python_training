@@ -14,9 +14,15 @@ def test_contact_on_home_page_and_edit(app):
 
 
 def test_contact_on_home_page_and_db(app, db):
-    contact_from_home_page = app.contact.get_contact_list()
-    contact_from_db = db.get_contact_list()
-    assert sorted(contact_from_db, key=Contact.id_or_max) == sorted(contact_from_home_page, key=Contact.id_or_max)
+    contacts_from_home_page = app.contact.get_contact_list()
+    contacts_from_db = db.get_contact_list()
+    list_contacts_from_home_page = list(
+        map(lambda i: (i.identifier, i.firstname, i.lastname, i.all_phones_from_home_page, i.all_email_from_home_page,
+                       i.address_company), contacts_from_home_page))
+    list_contacts_from_db = list(
+        map(lambda i: (i.identifier, i.firstname, i.lastname, merge_phones_like_on_home_page(i),
+                       merge_emails_like_on_home_and_edit_page(i), i.address_company), contacts_from_db))
+    assert sorted(list_contacts_from_home_page, key=lambda i: i[0]) == sorted(list_contacts_from_db, key=lambda i: i[0])
 
 
 def test_phones_on_contact_view_page(app):
