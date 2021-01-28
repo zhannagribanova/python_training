@@ -77,6 +77,26 @@ class ContactHelper:
         wd.find_element_by_name("update").click()
         self.contact_cache = None
 
+    def add_contact_in_group_by_id(self, id_contact, id_group):
+        wd = self.app.wd
+        self.open_home_page()
+        wd.find_element_by_css_selector("input[value='%s']" % id_contact).click()
+        wd.find_element_by_name("to_group").click()
+        Select(wd.find_element_by_xpath("//select[@name='to_group']")).select_by_value(id_group)
+        # Select(wd.find_element_by_name("to_group")).select_by_visible_text(u""+name_group+"")
+        # submit add contact in group
+        wd.find_element_by_name("add").click()
+        self.contact_cache = None
+
+    def del_contact_from_group_by_id(self, id_contact, id_group):
+        wd = self.app.wd
+        self.open_home_page()
+        wd.find_element_by_name("group").click()
+        Select(wd.find_element_by_xpath("//select[@name='group']")).select_by_value(id_group)
+        wd.find_element_by_css_selector("input[value='%s']" % id_contact).click()
+        wd.find_element_by_name("remove").click()
+        self.contact_cache = None
+
     def change_fild_value(self, field_name, text):
         wd = self.app.wd
         if text is not None:
@@ -143,6 +163,8 @@ class ContactHelper:
             wd = self.app.wd
             self.open_home_page()
             self.contact_cache = []
+            wd.find_element_by_name("group").click()
+            Select(wd.find_element_by_name("group")).select_by_visible_text("[all]")
             for element in wd.find_elements_by_css_selector('tr[name="entry"]'):
                 firstname_text = element.find_element_by_css_selector("td:nth-child(3)").text
                 lastname_text = element.find_element_by_css_selector("td:nth-child(2)").text
