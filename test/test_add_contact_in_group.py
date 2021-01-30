@@ -33,6 +33,8 @@ def test_add_contact_in_group(app, orm, check_ui):
         app.group.create(Group(name='Test'))
     contacts = orm.get_contact_list()
     groups = orm.get_group_list()
+    if orm.all_contacts_in_all_groups(groups):
+        app.group.create(Group(name='Test'))
     edit_contact = random.choice(contacts)
     add_group_to_contact = random.choice(groups)
     app.contact.add_contact_in_group_by_id(edit_contact.identifier, add_group_to_contact.identifier)
