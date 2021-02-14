@@ -1,5 +1,8 @@
 from selenium.webdriver.support.ui import Select
 from model.contact import Contact
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException
 import re
 
 
@@ -41,7 +44,14 @@ class ContactHelper:
         self.select_contact_by_id(id)
         # submit deletion
         wd.find_element_by_xpath("//input[@value='Delete']").click()
-        wd.switch_to_alert().accept()
+        try:
+            WebDriverWait(wd, 3).until(EC.alert_is_present(), 'Timed out waiting confirmation popup to appear.')
+            alert = wd.switch_to.alert
+            alert.accept()
+        except TimeoutException:
+            print("no alert")
+        # wd.switch_to_alert().accept()
+        self.open_home_page()
         self.contact_cache = None
 
     def delete_contact_by_index(self, index):
@@ -50,7 +60,14 @@ class ContactHelper:
         self.select_contact_by_index(index)
         # submit deletion
         wd.find_element_by_xpath("//input[@value='Delete']").click()
-        wd.switch_to_alert().accept()
+        try:
+            WebDriverWait(wd, 3).until(EC.alert_is_present(), 'Timed out waiting confirmation popup to appear.')
+            alert = wd.switch_to.alert
+            alert.accept()
+        except TimeoutException:
+            print("no alert")
+        # wd.switch_to_alert().accept()
+        self.open_home_page()
         self.contact_cache = None
 
     def delete_first_contact(self):
